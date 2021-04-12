@@ -1,4 +1,6 @@
 import json
+from user import user
+from datetime import datetime
 
 path = 'data/serverData.json'
 
@@ -38,12 +40,16 @@ def getPrefix(guildID):
         data = json.load(f)
     return data[guildID]["prefix"]
 
-def main ():
-    addServer('test')
-    addUser('test', 'arcs', 'sus', '1000')
-    addUser('test', 'antichess', 'vent', '1000')
-    addUser('test', 'arcs', 'red', '2000')
-    changePrefix('test', '?')
+def getUsers(guildID):
+    with open (path, 'r') as f:
+        data = json.load(f)
+    
+    users = []
+    for x in data[guildID]["users"].keys():
+        currId = x
+        currWord = data[guildID]["users"].get(x)[0]
+        currTime = data[guildID]["users"].get(x)[1]
+        users.append(user(currId, currWord, currTime))
+    users.sort()
 
-if __name__ == "__main__":
-    main()
+    return users

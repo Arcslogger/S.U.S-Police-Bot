@@ -1,3 +1,4 @@
 # discord stuff
-run.json
-prefix.json
+data/
+# python stuff
+__pycache__/

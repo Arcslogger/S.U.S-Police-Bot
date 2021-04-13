@@ -1,5 +1,9 @@
 #  <center>🚨S.U.S Police and Monitoring Services™🚨</center>
 
+
+### [Invite me!](https://discord.com/api/oauth2/authorize?client_id=831578136004132905&permissions=2618289392&scope=bot)
+
+
 ## About
 Have you ever wondered what kind of *sussy* things your server is doing? Fear no more, for the S.U.S (Suspicious User Services) Police are here to help! 
 
@@ -15,6 +19,4 @@ For more info and help with commands, ping `@S.U.S Police`
 - among
 - imposter
 - postbox
-
-[Invite me!](https://discord.com/api/oauth2/authorize?client_id=831578136004132905&permissions=2618289392&scope=bot)
 

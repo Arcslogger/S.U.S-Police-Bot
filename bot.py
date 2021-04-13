@@ -36,7 +36,7 @@ async def updateLeaderboard(guild):
     for member in members:
         if firstRole in member.roles and member.id != int(userList[0].id):
             await member.remove_roles(firstRole)
-        if lastRole in member.roles and member.id != int(userList[-1].id):
+        if lastRole in member.roles and member.id != int(userList[0].id):
             await member.remove_roles(lastRole)
     await guild.get_member(int(userList[0].id)).add_roles(firstRole)
     await guild.get_member(int(userList[-1].id)).add_roles(lastRole)

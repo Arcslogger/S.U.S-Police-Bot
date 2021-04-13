@@ -1,6 +1,5 @@
 import json
 from user import user
-from datetime import datetime
 
 path = 'data/serverData.json'
 

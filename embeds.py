@@ -1,6 +1,5 @@
 import discord
 from datetime import datetime
-import readData
 
 def leaderBoard (userList, topUser):
     userID = ""

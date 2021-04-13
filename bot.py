@@ -6,7 +6,7 @@ import readData
 import embeds
 
 serverDataPath = 'data/serverData.json'
-wordList = ['sus', 'amogus', 'vent', 'red']
+wordList = ['sus', 'amog', 'vent', 'red', 'among', 'impostor', 'postbox', '\N{POSTBOX}']
 intents = discord.Intents.default()
 intents.members = True
 
@@ -34,9 +34,9 @@ async def updateLeaderboard(guild):
     lastRole = discord.utils.get(guild.roles,name="IMPOSTER 👺")
     members = guild.members
     for member in members:
-        if firstRole in member.roles:
+        if firstRole in member.roles and member.id != int(userList[0].id):
             await member.remove_roles(firstRole)
-        if lastRole in member.roles:
+        if lastRole in member.roles and member.id != int(userList[-1].id):
             await member.remove_roles(lastRole)
     await guild.get_member(int(userList[0].id)).add_roles(firstRole)
     await guild.get_member(int(userList[-1].id)).add_roles(lastRole)
@@ -50,7 +50,7 @@ async def updateLeaderboard(guild):
     
 @tasks.loop(seconds = 60)
 async def update():
-    print('loop')
+    # print('loop')
     for x in client.guilds:
         await updateLeaderboard(x)
 
@@ -92,7 +92,7 @@ async def on_message(msg):
         #sus word
         for x in wordList:
             if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower() and not msg.author.bot:
-                print("sus")
+                # print("sus")
                 emoji = '\N{POSTBOX}'
                 await msg.add_reaction(emoji)
                 readData.addUser(str(msg.guild.id), str(msg.author.id), x, str(int(time.time())))

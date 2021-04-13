@@ -9,7 +9,7 @@ def addServer(guildID):
     with open (path, 'r') as f:
         data = json.load(f)
     #append new server data to dict 
-    append = {guildID:{'prefix': ".", 'users': {}}}
+    append = {guildID:{'prefix': "%", 'users': {}}}
     data.update(append)
     #write updated dict to file
     with open (path, 'w') as f:

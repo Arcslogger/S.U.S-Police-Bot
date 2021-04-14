@@ -1,5 +1,5 @@
 import discord
-import readData
+import util.readData as readData
 from datetime import datetime
 
 def leaderBoard (userList, topUser):
@@ -31,7 +31,7 @@ def leaderBoard (userList, topUser):
     embed.add_field(name="🈲 PHRASE", value=userWord, inline = True)
     embed.add_field(name="⏰ TIME (EST)", value=userTime, inline = True)    
     embed.add_field(name="not SUS™✓", value=f"<@{firstUserID}>", inline = True)  
-    embed.add_field(name="IMPOSTER 👺", value=f"<@{lastuserID}>", inline = True) 
+    embed.add_field(name="IMPOSTOR 👺", value=f"<@{lastuserID}>", inline = True) 
     embed.set_footer(text = 'Refreshed every minute. Force a refresh using the lb command.')    
     return embed
 

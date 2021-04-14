@@ -2,68 +2,36 @@ import discord
 from discord.ext import commands, tasks
 import time
 import json
-import readData
-import embeds
+import util.readData as readData
+import util.embeds as embeds
+import util.rankings as rankings
 
 serverDataPath = 'data/serverData.json'
 wordList = ['sus', 'amog', 'vent', 'red', 'among', 'impostor', 'postbox', '\N{POSTBOX}']
 intents = discord.Intents.default()
 intents.members = True
 
+# why does it break without this ;-;
 def get_prefix(client, message):
-    with open(serverDataPath, 'r') as f:
-        prefixes = json.load(f);
-    return prefixes[str(message.guild.id)]["prefix"]
+    return readData.getPrefix(str(message.guild.id))
 
 client = commands.Bot(command_prefix = get_prefix, intents=intents)
-
-async def updateLeaderboard(guild):
-    if discord.utils.get(guild.channels, name='sus-leaderboard') is None:
-        lbChannel = await guild.create_text_channel('sus leaderboard')
-        await lbChannel.edit(position=0, sync_permissions=True)
-    else:
-        lbChannel = discord.utils.get(guild.channels, name='sus-leaderboard')
-
-    userList = readData.getUsers(str(guild.id))
-    topUser = await client.fetch_user(int(userList[0].id))
-    messages = await lbChannel.history(limit=123).flatten()
-    
-    #Updates roles but really slow :(
-    firstRole = discord.utils.get(guild.roles,name="not SUS™✓")
-    lastRole = discord.utils.get(guild.roles,name="IMPOSTER 👺")
-    members = guild.members
-    for member in members:
-        if firstRole in member.roles and member.id != int(userList[0].id):
-            await member.remove_roles(firstRole)
-        if lastRole in member.roles and member.id != int(userList[0].id):
-            await member.remove_roles(lastRole)
-    await guild.get_member(int(userList[0].id)).add_roles(firstRole)
-    await guild.get_member(int(userList[-1].id)).add_roles(lastRole)
-
-    if not messages:
-        await lbChannel.send(embed = embeds.leaderBoard(userList, topUser))
-    else:
-        lbMessage = await lbChannel.fetch_message(lbChannel.last_message_id)
-        await lbMessage.edit(embed = embeds.leaderBoard(userList, topUser))
 
 @tasks.loop(seconds = 60)
 async def update():
     # print('loop')
     for x in client.guilds:
-        await updateLeaderboard(x)
+        await rankings.updateLeaderboard(client, x)
 
 @client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game('AMOGUS'))
-    print(int(time.time()))
     print('Kinda sus!')
 
 #Adds required roles and data to json file upon joining a server
 @client.event
 async def on_guild_join(guild):
     readData.addServer(str(guild.id))
-    await guild.create_role(name="not SUS™✓", colour=discord.Colour(0x00D62E))
-    await guild.create_role(name="IMPOSTER 👺", colour=discord.Colour(0xFF0000))
     print(f'joined server {guild.id}')
 
 #change prefix
@@ -76,19 +44,23 @@ async def changePrefix(ctx, prefix):
 #force update leaderboard
 @client.command()
 async def lb(ctx):  
-    updateLeaderboard(ctx.guild)
     userList = readData.getUsers(str(ctx.guild.id))
-    topUser = await client.fetch_user(int(userList[0].id))
-    await ctx.channel.send(embed = embeds.leaderBoard(userList, topUser))
+    try:
+        topUser = await client.fetch_user(int(userList[0].id))
+        await ctx.channel.send(embed = embeds.leaderBoard(userList, topUser))
+        await rankings.updateLeaderboard(client, ctx.guild)
+    except IndexError:
+        await ctx.send('No one has said a sussy word yet!')
 
-@client.command(seconds = 5)
-async def createLeaderboard(ctx):
-    updateLeaderboard(ctx.guild)
-    
 #all client.event stuff
 @client.event
 async def on_message(msg):
     try:
+        #delete messages in leaderboard channel
+        if discord.utils.get(msg.guild.channels, name='sus-leaderboard') is not None and not msg.author.bot:
+            lbChannel = discord.utils.get(msg.guild.channels, name='sus-leaderboard')
+            if(msg.channel.id == lbChannel.id):
+                await msg.delete()
         #sus word
         for x in wordList: #shove this into a method later
             if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower() and not msg.author.bot:
@@ -98,7 +70,6 @@ async def on_message(msg):
         #help command
         if msg.mentions[0] == client.user:
             await msg.channel.send(embed = embeds.help(msg.guild, wordList))
-           
     except IndexError:
         pass
     await client.process_commands(msg)    

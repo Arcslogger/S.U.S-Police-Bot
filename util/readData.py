@@ -1,5 +1,5 @@
 import json
-from user import user
+from util.user import user
 
 path = 'data/serverData.json'
 

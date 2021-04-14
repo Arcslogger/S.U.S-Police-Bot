@@ -13,10 +13,9 @@ For more info and help with commands, ping `@S.U.S Police`
 
 ## List of sus words checked:
 - sus
-- amog
+- amog/among
 - vent
 - red
-- among
-- imposter
+- imposter/impostor
 - postbox
 

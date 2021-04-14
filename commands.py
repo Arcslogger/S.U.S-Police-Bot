@@ -7,7 +7,7 @@ import util.embeds as embeds
 import util.rankings as rankings
 
 serverDataPath = 'data/serverData.json'
-wordList = ['sus', 'amog', 'vent', 'red', 'among', 'impostor', 'postbox', '\N{POSTBOX}']
+wordList = ['sus', 'amog', 'vent', 'red', 'among', 'impostor', 'imposter', 'postbox', '\N{POSTBOX}']
 intents = discord.Intents.default()
 intents.members = True
 
@@ -52,6 +52,11 @@ async def lb(ctx):
     except IndexError:
         await ctx.send('No one has said a sussy word yet!')
 
+#check ping
+@client.command(aliases=['sus'])
+async def check(ctx):
+    await ctx.send(embed = embeds.ping(client))
+
 #all client.event stuff
 @client.event
 async def on_message(msg):
@@ -74,13 +79,7 @@ async def on_message(msg):
         pass
     await client.process_commands(msg)    
 
-#test command, probably should turn this into a ping thing soon
-@client.command(aliases=['sus'])
-async def check(ctx):
-    await ctx.send('sus!')
-
 update.start()
-
 with open('data/run.json') as f:
     token = json.load(f);
 client.run(token['token']) 

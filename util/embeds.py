@@ -39,7 +39,14 @@ def help (guild, wordList):
     embed = discord.Embed(title = "List of Commands:", color=0xbe2d2d)
     embed.set_thumbnail(url="https://i.postimg.cc/yd4Jm0FV/1f8.png")
     embed.add_field(name="List of sussy words:", value=f"{wordList}", inline=False)
-    embed.add_field(name="Change prefix", value='`changePrefix`', inline=False)
+    embed.add_field(name="Change prefix", value='`changePrefix`', inline=True)
+    embed.add_field(name="Check ping", value='`sus`', inline=True)
     embed.add_field(name="Forceload Leaderboard", value='`lb`', inline=False)
     embed.set_footer(text=f"Prefix: {readData.getPrefix(str(guild.id))}")
+    return embed
+
+def ping (client):
+    emoji = '\N{POSTBOX}'
+    embed = discord.Embed(title=f'sus! {emoji}', color=0xbe2d2d)    
+    embed.add_field(name=f'⌛ Latency:', value=f'{round(client.latency * 1000)}ms')
     return embed

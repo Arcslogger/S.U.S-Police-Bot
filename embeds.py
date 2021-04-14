@@ -1,4 +1,5 @@
 import discord
+import readData
 from datetime import datetime
 
 def leaderBoard (userList, topUser):
@@ -32,4 +33,13 @@ def leaderBoard (userList, topUser):
     embed.add_field(name="not SUS™✓", value=f"<@{firstUserID}>", inline = True)  
     embed.add_field(name="IMPOSTER 👺", value=f"<@{lastuserID}>", inline = True) 
     embed.set_footer(text = 'Refreshed every minute. Force a refresh using the lb command.')    
+    return embed
+
+def help (guild, wordList):
+    embed = discord.Embed(title = "List of Commands:", color=0xbe2d2d)
+    embed.set_thumbnail(url="https://i.postimg.cc/yd4Jm0FV/1f8.png")
+    embed.add_field(name="List of sussy words:", value=f"{wordList}", inline=False)
+    embed.add_field(name="Change prefix", value='`changePrefix`', inline=False)
+    embed.add_field(name="Forceload Leaderboard", value='`lb`', inline=False)
+    embed.set_footer(text=f"Prefix: {readData.getPrefix(str(guild.id))}")
     return embed

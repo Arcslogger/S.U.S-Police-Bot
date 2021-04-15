@@ -60,24 +60,27 @@ async def check(ctx):
 #all client.event stuff
 @client.event
 async def on_message(msg):
-    try:
-        #delete messages in leaderboard channel
-        if discord.utils.get(msg.guild.channels, name='sus-leaderboard') is not None and not msg.author.bot:
-            lbChannel = discord.utils.get(msg.guild.channels, name='sus-leaderboard')
-            if(msg.channel.id == lbChannel.id):
-                await msg.delete()
-        #sus word
-        for x in wordList: #shove this into a method later
-            if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower() and not msg.author.bot:
-                emoji = '\N{POSTBOX}'
-                await msg.add_reaction(emoji)
-                readData.addUser(str(msg.guild.id), str(msg.author.id), x, str(int(time.time())))
-        #help command
-        if msg.mentions[0] == client.user:
-            await msg.channel.send(embed = embeds.help(msg.guild, wordList))
-    except IndexError:
-        pass
-    await client.process_commands(msg)    
+    if not msg.author.bot:
+        try:
+            #delete messages in leaderboard channel
+            if discord.utils.get(msg.guild.channels, name='sus-leaderboard') is not None:
+                lbChannel = discord.utils.get(msg.guild.channels, name='sus-leaderboard')
+                if(msg.channel.id == lbChannel.id):
+                    await msg.delete()
+            #sus word
+            word = 'filler'
+            for x in wordList: #shove this into a method later
+                if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower():
+                    emoji = '\N{POSTBOX}'
+                    await msg.add_reaction(emoji)
+                    word = x
+            readData.addUser(str(msg.guild.id), str(msg.author.id), word, str(int(time.time())))
+            #help command
+            if msg.mentions[0] == client.user:
+                await msg.channel.send(embed = embeds.help(msg.guild, wordList))
+        except IndexError:
+            pass
+        await client.process_commands(msg)    
 
 update.start()
 with open('data/run.json') as f:

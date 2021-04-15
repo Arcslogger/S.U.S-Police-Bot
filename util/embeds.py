@@ -18,7 +18,7 @@ def leaderBoard (userList, topUser):
         else:
             userID += f"{rank}.\t<@{x.id}>\n"
         userWord += f"\"{x.word}\"\n"
-        userTime += f"{(datetime.utcfromtimestamp(int(x.time) - 14400).strftime('%Y-%m-%d %H:%M:%S'))}\n"
+        userTime += f"**{x.score}** ({(datetime.utcfromtimestamp(int(x.time) - 14400).strftime('%Y-%m-%d %H:%M:%S'))})\n"
         rank += 1
 
     firstUserID = userList[0].id
@@ -29,7 +29,7 @@ def leaderBoard (userList, topUser):
     emoji = '\N{POSTBOX}'
     embed.add_field(name=f"{emoji} USERS", value=userID, inline = True)
     embed.add_field(name="🈲 PHRASE", value=userWord, inline = True)
-    embed.add_field(name="⏰ TIME (EST)", value=userTime, inline = True)    
+    embed.add_field(name="⏰ SCORE AND TIME (EST)", value=userTime, inline = True)    
     embed.add_field(name="not SUS™✓", value=f"<@{firstUserID}>", inline = True)  
     embed.add_field(name="IMPOSTOR 👺", value=f"<@{lastuserID}>", inline = True) 
     embed.set_footer(text = 'Refreshed every minute. Force a refresh using the lb command.')    

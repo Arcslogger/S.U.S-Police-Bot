@@ -1,4 +1,6 @@
 import json
+import math
+import time
 from util.user import user
 
 path = 'data/serverData.json'
@@ -18,12 +20,17 @@ def addUser(guildID, user, word, time):
     #open orig file as dict
     with open (path, 'r') as f:
         data = json.load(f)
-    #append user data to dict 
-    append = {user: [word, time]}
-    data[guildID]["users"].update(append)
-    #append updated dict to file
-    with open (path, 'w') as f:
-        json.dump(data, f, indent=4)
+        #append user data to dict
+        currUser = data[guildID]["users"].get(user)
+        if word =='filler' and currUser is not None:
+            append = {user: [str(currUser[0]), str(currUser[1]), str(int(currUser[2]) + 1)]}
+            data[guildID]["users"].update(append)
+        elif word != 'filler':
+            append = {user: [word, time, "1"]}
+            data[guildID]["users"].update(append)
+        #append updated dict to file
+        with open (path, 'w') as f:
+            json.dump(data, f, indent=4)
 
 def changePrefix(guildID, prefix):
     with open (path, 'r') as f:
@@ -48,7 +55,10 @@ def getUsers(guildID):
         currId = x
         currWord = data[guildID]["users"].get(x)[0]
         currTime = data[guildID]["users"].get(x)[1]
-        users.append(user(currId, currWord, currTime))
+        msgCount = int(data[guildID]["users"].get(x)[2])
+        score = int(math.sqrt(int(time.time()) - int(currTime)) * int(5.0 + 1/msgCount)) #change this for the score
+        users.append(user(currId, currWord, currTime, score))
+
     users.sort()
 
     return users

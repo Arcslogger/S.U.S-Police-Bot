@@ -21,7 +21,6 @@ def leaderBoard (userList, topUser):
             userID += f"{rank}.\t<@{x.id}>\n"
         userWord += f"\"{x.word}\"\n"
         userTime += f"{x.score}\n"
-        #userTime += f"**{x.score}** ({(datetime.utcfromtimestamp(int(x.time) - 14400).strftime('%Y-%m-%d %H:%M:%S'))})\n"
         rank += 1
         if rank == 21:
             break

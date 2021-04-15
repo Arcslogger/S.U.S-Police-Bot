@@ -1,4 +1,5 @@
 import discord
+import json
 import util.readData as readData
 import util.embeds as embeds
 
@@ -16,10 +17,8 @@ async def updateRoles(guild, userList):
     for member in members:
         if firstRole in member.roles and member.id != int(userList[0].id):
             await member.remove_roles(firstRole)
-            print("removed not sus")
         if lastRole in member.roles and member.id != int(userList[-1].id):
             await member.remove_roles(lastRole)
-            print("removed sus")
     await guild.get_member(int(userList[0].id)).add_roles(firstRole)
     await guild.get_member(int(userList[-1].id)).add_roles(lastRole)
 
@@ -49,3 +48,18 @@ async def updateLeaderboard(client, guild):
     except Exception as e:
         print(f"leaderboard error in server {guild.name}")
         print(e)
+
+async def score(client, serverDataPath, ctx, member):
+    with open (serverDataPath, 'r') as f:
+        data = json.load(f)
+    
+    userData = data[str(ctx.guild.id)]["users"].get(str(member.id))
+    nick = member.nick
+    if nick is None:
+        nick = member.name
+
+    if userData is not None:
+        userObj = await client.fetch_user(member.id)
+        await ctx.send(embed = embeds.score(userObj, nick, userData[0], int(userData[1]), int(userData[2])))
+    else:
+        await ctx.send(f"{nick} has never acted sussy!")

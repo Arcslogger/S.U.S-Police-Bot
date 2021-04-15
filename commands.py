@@ -1,3 +1,4 @@
+from collections import UserDict
 import discord
 from discord.ext import commands, tasks
 import time
@@ -52,6 +53,16 @@ async def lb(ctx):
     except IndexError:
         await ctx.send('No one has said a sussy word yet!')
 
+@client.command()
+async def score(ctx, member : discord.Member):
+    await rankings.score(client, serverDataPath, ctx, member)
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if ctx.message.content.lower().startswith(str(readData.getPrefix(str(ctx.guild.id))) + "score"):
+            await rankings.score(client, serverDataPath, ctx, ctx.author)
+
 #check ping
 @client.command(aliases=['sus'])
 async def check(ctx):
@@ -81,6 +92,9 @@ async def on_message(msg):
         except IndexError:
             pass
         await client.process_commands(msg)    
+@client.event
+async def on_member_remove(member):
+    readData.removeUser(str(member.guild.id), str(member.id))
 
 update.start()
 with open('data/run.json') as f:

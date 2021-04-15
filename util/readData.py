@@ -32,6 +32,15 @@ def addUser(guildID, user, word, time):
         with open (path, 'w') as f:
             json.dump(data, f, indent=4)
 
+def removeUser(guildID, user):
+    with open (path, 'r') as f:
+        data = json.load(f)
+    currUser = data[guildID]["users"].get(user)
+    if currUser is not None:
+        del data[guildID]["users"][user]
+    with open (path, 'w') as f:
+        json.dump(data, f, indent=4)
+
 def changePrefix(guildID, prefix):
     with open (path, 'r') as f:
         data = json.load(f)
@@ -56,7 +65,7 @@ def getUsers(guildID):
         currWord = data[guildID]["users"].get(x)[0]
         currTime = data[guildID]["users"].get(x)[1]
         msgCount = int(data[guildID]["users"].get(x)[2])
-        score = int(math.sqrt(int(time.time()) - int(currTime)) + int(msgCount / 10)) #change this for the score
+        score = int(math.sqrt(int(time.time()) - int(currTime)) + int(msgCount / 6)) #change this for the score
         users.append(user(currId, currWord, currTime, score))
 
     users.sort()

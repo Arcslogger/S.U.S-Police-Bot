@@ -56,7 +56,7 @@ def getUsers(guildID):
         currWord = data[guildID]["users"].get(x)[0]
         currTime = data[guildID]["users"].get(x)[1]
         msgCount = int(data[guildID]["users"].get(x)[2])
-        score = int(math.sqrt(int(time.time()) - int(currTime)) * int(5.0 + 1/msgCount)) #change this for the score
+        score = int(math.sqrt(int(time.time()) - int(currTime)) + int(msgCount / 10)) #change this for the score
         users.append(user(currId, currWord, currTime, score))
 
     users.sort()

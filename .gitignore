@@ -2,3 +2,6 @@
 data/
 # python stuff
 __pycache__/
+# aws
+Procfile
+requirements.txt

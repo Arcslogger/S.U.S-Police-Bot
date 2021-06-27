@@ -8,13 +8,22 @@ import util.embeds as embeds
 import util.rankings as rankings
 
 serverDataPath = 'data/serverData.json'
-wordList = ['sus', 'amog', 'vent', 'red', 'among', 'impostor', 'imposter', 'postbox', '\N{POSTBOX}']
+wordList = ['sus', '5u5', 'amog', 'am0g', 'vent', 'v3nt', 'red', 'r3d', 'among', 'am0ng', 'impostor', 'imposter', 'postbox', 'flower playing cards', '月', 'ඞ', '\N{POSTBOX}', '\N{FLOWER PLAYING CARDS}', '\N{SQUARED SOS}', '\N{SUSHI}', '\N{SUSPENSION RAILWAY}']
 intents = discord.Intents.default()
 intents.members = True
+intents.messages = True
 
 # why does it break without this ;-;
 def get_prefix(client, message):
     return readData.getPrefix(str(message.guild.id))
+
+#sus word detector
+def check_sus(msg):
+    word = 'filler'
+    for x in wordList: #shove this into a method later
+        if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower():
+            word = x
+    return word
 
 client = commands.Bot(command_prefix = get_prefix, intents=intents)
 
@@ -35,6 +44,14 @@ async def on_guild_join(guild):
     readData.addServer(str(guild.id))
     print(f'joined server {guild.id}')
 
+#bot stats
+@client.command()
+async def stats(ctx):
+    if ctx.author.id == 358028710827261964:
+        await ctx.channel.send(embed = embeds.devStats(client, int(round((time.time() - startTime)))))
+    else:
+        await ctx.channel.send('You are not premitted to use this command')
+
 #change prefix
 @client.command()
 @commands.has_permissions(administrator = True)
@@ -53,20 +70,21 @@ async def lb(ctx):
     except IndexError:
         await ctx.send('No one has said a sussy word yet!')
 
-@client.command()
-async def score(ctx, member : discord.Member):
-    await rankings.score(client, serverDataPath, ctx, member)
-
-@client.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if ctx.message.content.lower().startswith(str(readData.getPrefix(str(ctx.guild.id))) + "score"):
-            await rankings.score(client, serverDataPath, ctx, ctx.author)
-
 #check ping
 @client.command(aliases=['sus'])
 async def check(ctx):
     await ctx.send(embed = embeds.ping(client))
+
+#check score of member
+@client.command()
+async def score(ctx, member : discord.Member):
+    await rankings.score(client, serverDataPath, ctx, member)
+
+#check score of self
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument) and ctx.message.content.lower().startswith(str(readData.getPrefix(str(ctx.guild.id))) + "score"):
+        await rankings.score(client, serverDataPath, ctx, ctx.author)
 
 #all client.event stuff
 @client.event
@@ -79,23 +97,30 @@ async def on_message(msg):
                 if(msg.channel.id == lbChannel.id):
                     await msg.delete()
             #sus word
-            word = 'filler'
-            for x in wordList: #shove this into a method later
-                if not msg.content.lower().startswith(('.', readData.getPrefix(str(msg.guild.id)))) and x in msg.content.lower():
-                    emoji = '\N{POSTBOX}'
-                    await msg.add_reaction(emoji)
-                    word = x
+            word = check_sus(msg)
+            if word != 'filler':
+                await msg.add_reaction('\N{POSTBOX}')
             readData.addUser(str(msg.guild.id), str(msg.author.id), word, str(int(time.time())))
             #help command
             if msg.mentions[0] == client.user:
                 await msg.channel.send(embed = embeds.help(msg.guild, wordList))
         except IndexError:
             pass
-        await client.process_commands(msg)    
+        await client.process_commands(msg)   
+
 @client.event
 async def on_member_remove(member):
     readData.removeUser(str(member.guild.id), str(member.id))
 
+@client.event
+async def on_message_edit(before, after):
+    if not before.author.bot and before.content != after.content: #if edited message contains sus word
+        word = check_sus(after)
+        if word != 'filler':
+            await after.add_reaction('\N{POSTBOX}')
+        readData.addUser(str(after.guild.id), str(after.author.id), word, str(int(time.time())))
+
+startTime = time.time()
 update.start()
 with open('data/run.json') as f:
     token = json.load(f);

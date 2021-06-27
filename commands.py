@@ -8,7 +8,7 @@ import util.embeds as embeds
 import util.rankings as rankings
 
 serverDataPath = 'data/serverData.json'
-wordList = ['sus', '5u5', 'amog', 'am0g', 'vent', 'v3nt', 'red', 'r3d', 'among', 'am0ng', 'impostor', 'imposter', 'postbox', 'flower playing cards', '月', 'ඞ', '\N{POSTBOX}', '\N{FLOWER PLAYING CARDS}', '\N{SQUARED SOS}', '\N{SUSHI}', '\N{SUSPENSION RAILWAY}']
+wordList = ['sus', '5u5', 'amog', 'am0g', 'vent', 'v3nt', 'red', 'r3d', 'among', 'am0ng', 'impostor', 'imposter', 'postbox', 'sos', 'flower playing cards', '月', 'ඞ', '\N{POSTBOX}', '\N{FLOWER PLAYING CARDS}', '\N{SQUARED SOS}', '\N{SUSHI}', '\N{SUSPENSION RAILWAY}']
 intents = discord.Intents.default()
 intents.members = True
 intents.messages = True

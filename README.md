@@ -22,4 +22,5 @@ For more info and help with commands, ping `@S.U.S Police`
 - 🎴
 - 月
 - ඞ
+- 🚟 
 

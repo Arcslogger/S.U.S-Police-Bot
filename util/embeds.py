@@ -70,3 +70,9 @@ def score (user, nick, word, susTime, msgCount):
     embed.add_field(name=f"💯 SCORE:", value = f'```\n√({secondsSince}) + ({msgCount} / 6) = {scoreFormatted}```', inline = True)
     embed.set_footer(text="Note: Score will always be floored due to the nature of integer casting")
     return embed
+
+def devStats (client, time):
+    embed = discord.Embed(title = "📊 BOT STATS", color=0xbe2d2d)
+    embed.add_field(name=f"SERVER COUNT:", value=str(len(client.guilds)), inline = False)
+    embed.add_field(name=f"BOT UPTIME", value =f'`{time}` seconds', inline=False)
+    return embed

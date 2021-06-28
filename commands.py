@@ -89,7 +89,7 @@ async def on_command_error(ctx, error):
 #all client.event stuff
 @client.event
 async def on_message(msg):
-    if not msg.author.bot:
+    if not msg.author.bot and msg.guild is not None:
         try:
             #delete messages in leaderboard channel
             if discord.utils.get(msg.guild.channels, name='sus-leaderboard') is not None:

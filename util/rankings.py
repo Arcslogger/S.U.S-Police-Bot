@@ -33,18 +33,22 @@ async def updateLeaderboard(client, guild):
         userList = readData.getUsers(str(guild.id))
         await updateRoles(guild, userList)
         topUser = await client.fetch_user(int(userList[0].id))
-        messageID = lbChannel.last_message_id
-        
-        if messageID is None:
-            await lbChannel.send(embed = embeds.leaderBoard(userList, topUser))
-        else:
-            try:
-                lbMessage = await lbChannel.fetch_message(messageID)
-                await lbMessage.edit(embed = embeds.leaderBoard(userList, topUser))
-            except Exception as e: #if bot can't edit a message, reset channel and display a new leaderboard
-                print(f"leaderboard edit error: {e}")
-                await lbChannel.purge(limit=10)
+        try:
+            messageID = lbChannel.last_message_id
+            
+            if messageID is None:
                 await lbChannel.send(embed = embeds.leaderBoard(userList, topUser))
+            else:
+                try:
+                    lbMessage = await lbChannel.fetch_message(messageID)
+                    await lbMessage.edit(embed = embeds.leaderBoard(userList, topUser))
+                except Exception as e: #if bot can't edit a message, reset channel and display a new leaderboard
+                    print(f"leaderboard edit error: {e}")
+                    await lbChannel.purge(limit=10)
+                    await lbChannel.send(embed = embeds.leaderBoard(userList, topUser))
+        except AttributeError: #duplicate (probably) voice channel exists
+            await lbChannel.delete()
+            await guild.system_channel.send('Deleted duplicate channel with name `sus-leaderboard`. Please make sure only one such text channel exists!')
     except Exception as e:
         print(f"leaderboard error in server {guild.name}")
         print(e)

@@ -21,5 +21,8 @@ We provide a list containing the most recent sussy message of every server membe
 | `score`   | Check your current score        |
 | `score @<user>`   | Check the score of <user>        |
 
+## Some Demos:
+
 <img src="assets/demo.png" alt="Here's what we can do for your server!" width="500"/>
+<img src="assets/score.png" alt="Here's what we can do for your server!" width="500"/>
 

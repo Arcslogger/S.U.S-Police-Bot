@@ -1,6 +1,6 @@
 #  <center>🚨S.U.S Police and Monitoring Services™🚨</center>
 
-[banner](/assets/banner.png)
+<img src="assets/banner.png" alt="banner" width="700"/>
 
 ## About
 
@@ -21,5 +21,5 @@ We provide a list containing the most recent sussy message of every server membe
 | `score`   | Check your current score        |
 | `score @<user>`   | Check the score of <user>        |
 
-[Here's an example of what we can do for your server!](/assets/demo.png)
+<img src="assets/demo.png" alt="Here's what we can do for your server!" width="500"/>
 
